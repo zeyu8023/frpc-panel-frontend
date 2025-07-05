@@ -3,8 +3,6 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [
-    react({
-      jsxRuntime: 'automatic', // ✅ 启用自动 JSX 转换
-    }),
+    react(), // ?? 不传 jsxRuntime，使用默认 classic 模式
   ],
 });
