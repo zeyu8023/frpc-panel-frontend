@@ -1,70 +1,41 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import { getApi } from '../lib/api';
 
 export default function Settings() {
-  const [frpcIniPath, setFrpcIniPath] = useState('')
-  const [containerName, setContainerName] = useState('')
-  const [loading, setLoading] = useState(true)
+  const [config, setConfig] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  // 加载当前配置
+  const loadConfig = async () => {
+    const res = await getApi().get('/settings');
+    setConfig(JSON.stringify(res.data, null, 2));
+    setLoading(false);
+  };
+
   useEffect(() => {
-  axios
-    .get('/api/settings')
-    .then(res => {
-      setFrpcIniPath(res.data.frpc_ini || '')
-      setContainerName(res.data.container_name || '')
-    })
-    .catch(err => {
-      console.error('获取设置失败:', err)
-    })
-}, [])
+    loadConfig();
+  }, []);
 
   const handleSave = async () => {
-    try {
-      await axios.post('/api/settings', {
-        frpc_ini: frpcIniPath,
-        container_name: containerName
-      })
-      alert('配置已保存 ✅')
-    } catch {
-      alert('保存失败 ❌')
-    }
-  }
+    await getApi().put('/settings', JSON.parse(config));
+    alert('配置已保存');
+  };
 
-  if (loading) return <div className="p-6">加载中...</div>
+  const handleRestore = async () => {
+    await getApi().post('/settings/restore');
+    loadConfig();
+    alert('已恢复默认配置');
+  };
+
+  if (loading) return <div className="p-4">加载中...</div>;
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">⚙️ 设置</h2>
-
-      <div className="mb-4">
-        <label className="block mb-1 text-sm text-gray-300">frpc.ini 路径</label>
-        <input
-          type="text"
-          className="w-full p-2 rounded bg-gray-800 border border-gray-600"
-          value={frpcIniPath}
-          onChange={(e) => setFrpcIniPath(e.target.value)}
-          placeholder="/etc/frpc/frpc.ini"
-        />
+    <div className="p-4">
+      <h2 className="text-xl mb-4">全局配置</h2>
+      <textarea className="w-full h-64 bg-gray-800 p-2 rounded" value={config} onChange={(e) => setConfig(e.target.value)} />
+      <div className="space-x-2 mt-4">
+        <button className="bg-green-600 px-4 py-2 rounded" onClick={handleSave}>保存配置</button>
+        <button className="bg-red-600 px-4 py-2 rounded" onClick={handleRestore}>恢复默认</button>
       </div>
-
-      <div className="mb-6">
-        <label className="block mb-1 text-sm text-gray-300">frpc 容器名称</label>
-        <input
-          type="text"
-          className="w-full p-2 rounded bg-gray-800 border border-gray-600"
-          value={containerName}
-          onChange={(e) => setContainerName(e.target.value)}
-          placeholder="frpc_client"
-        />
-      </div>
-
-      <button
-        onClick={handleSave}
-        className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
-      >
-        💾 保存配置
-      </button>
     </div>
-  )
+  );
 }
