@@ -1,45 +1,39 @@
-import { useState } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    try {
-      const res = await axios.post('/api/login', { username, password })
-      localStorage.setItem('token', res.data.token)
-      window.location.href = '/'
-    } catch {
-      alert('登录失败')
+  const handleLogin = () => {
+    if (username === 'admin' && password === 'admin') {
+      localStorage.setItem('token', 'mock-token');
+      navigate('/');
+    } else {
+      alert('用户名或密码错误');
     }
-  }
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900">
-      <div className="bg-gray-800 p-6 rounded w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-4 text-center">登录</h2>
-        <input
-          type="text"
-          placeholder="用户名"
-          className="w-full p-2 mb-3 rounded bg-gray-700"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="密码"
-          className="w-full p-2 mb-4 rounded bg-gray-700"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button
-          onClick={handleLogin}
-          className="w-full bg-blue-600 hover:bg-blue-700 p-2 rounded"
-        >
-          登录
-        </button>
-      </div>
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-900 text-white">
+      <h1 className="text-2xl mb-4">登录</h1>
+      <input
+        className="mb-2 p-2 bg-gray-800 border border-gray-600"
+        placeholder="用户名"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <input
+        className="mb-4 p-2 bg-gray-800 border border-gray-600"
+        placeholder="密码"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button className="bg-blue-600 px-4 py-2 rounded" onClick={handleLogin}>
+        登录
+      </button>
     </div>
-  )
+  );
 }
