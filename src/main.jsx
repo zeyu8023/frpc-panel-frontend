@@ -4,6 +4,7 @@ import App from './app.jsx';
 import './index.css';
 import { getRuntimeConfig } from './config';
 import { initApi } from './lib/api';
+import React from 'react';
 
 getRuntimeConfig().then((config) => {
   window.API_BASE = config.VITE_API_BASE;
