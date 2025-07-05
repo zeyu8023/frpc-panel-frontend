@@ -1,12 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Login from './pages/Login'
-import Dashboard from './pages/Dashboard'
-import Settings from './pages/Settings'
-import Proxies from './pages/Proxies'
-import Logs from './pages/Logs'
-import Account from './pages/Account'
-import Navbar from './components/Navbar'
-import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Settings from './pages/Settings';
+import Proxies from './pages/Proxies';
+import Logs from './pages/Logs';
+import Account from './pages/Account';
+import Navbar from './components/Navbar';
+import React from 'react';
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
         </Routes>
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
