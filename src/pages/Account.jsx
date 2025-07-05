@@ -1,75 +1,44 @@
-import { useState } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import { getApi } from '../lib/api';
+import { useNavigate } from 'react-router-dom';
 
 export default function Account() {
-  const [currentPassword, setCurrentPassword] = useState('')
-  const [newPassword, setNewPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleChangePassword = async () => {
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      alert('请填写所有字段')
-      return
-    }
-    if (newPassword !== confirmPassword) {
-      alert('新密码不一致')
-      return
-    }
+  useEffect(() => {
+    getApi()
+      .get('/account')
+      .then((res) => setUser(res.data))
+      .catch(() => setError('账户信息加载失败'))
+      .finally(() => setLoading(false));
+  }, []);
 
-    try {
-      await axios.post('/api/account/password', {
-        current_password: currentPassword,
-        new_password: newPassword,
-      })
-      alert('密码修改成功 ✅')
-      setCurrentPassword('')
-      setNewPassword('')
-      setConfirmPassword('')
-    } catch {
-      alert('密码修改失败 ❌')
-    }
-  }
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  if (loading) return <div className="p-4">加载中...</div>;
+  if (error) return <div className="p-4 text-red-500">{error}</div>;
 
   return (
-    <div className="p-6 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-6">👤 修改密码</h2>
-
-      <div className="mb-4">
-        <label className="block mb-1 text-sm text-gray-300">当前密码</label>
-        <input
-          type="password"
-          className="w-full p-2 rounded bg-gray-800 border border-gray-600"
-          value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)}
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block mb-1 text-sm text-gray-300">新密码</label>
-        <input
-          type="password"
-          className="w-full p-2 rounded bg-gray-800 border border-gray-600"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-      </div>
-
-      <div className="mb-6">
-        <label className="block mb-1 text-sm text-gray-300">确认新密码</label>
-        <input
-          type="password"
-          className="w-full p-2 rounded bg-gray-800 border border-gray-600"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-      </div>
-
-      <button
-        onClick={handleChangePassword}
-        className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded w-full"
-      >
-        💾 保存密码
-      </button>
+    <div className="p-4">
+      <h2 className="text-xl mb-4">账户信息</h2>
+      {user ? (
+        <div className="space-y-2">
+          <div><strong>用户名：</strong>{user.username}</div>
+          <div><strong>角色：</strong>{user.role || '普通用户'}</div>
+          <div><strong>登录时间：</strong>{user.login_time || '未知'}</div>
+          <button className="mt-4 bg-red-600 px-4 py-2 rounded" onClick={handleLogout}>
+            退出登录
+          </button>
+        </div>
+      ) : (
+        <div>未获取到用户信息</div>
+      )}
     </div>
-  )
+  );
 }
