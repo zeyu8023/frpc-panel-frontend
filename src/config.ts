@@ -1,8 +1,4 @@
-interface RuntimeConfig {
-  VITE_API_BASE: string;
-}
-
-export const getRuntimeConfig = async (): Promise<RuntimeConfig> => {
-  const response = await fetch('/config.json');
-  return await response.json();
+export const getRuntimeConfig = async () => {
+  const res = await fetch('/config.json');
+  return await res.json();
 };
