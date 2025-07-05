@@ -6,6 +6,7 @@ import Proxies from './pages/Proxies'
 import Logs from './pages/Logs'
 import Account from './pages/Account'
 import Navbar from './components/Navbar'
+import React from 'react'
 
 function App() {
   return (
