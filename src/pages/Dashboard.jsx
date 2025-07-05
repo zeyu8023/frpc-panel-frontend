@@ -1,25 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { getApi } from '../lib/api';
 
 export default function Dashboard() {
-  const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    getApi().get('/dashboard')
-      .then((res) => setStats(res.data))
-      .catch(() => setError('仪表盘数据加载失败'))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <div className="p-4">加载中...</div>;
-  if (error) return <div className="p-4 text-red-500">{error}</div>;
+  const handleRestart = async () => {
+    try {
+      await getApi().post('/restart');
+      setMessage('? frpc 重启成功');
+    } catch {
+      setMessage('? 重启失败');
+    }
+  };
 
   return (
     <div className="p-4">
-      <h2 className="text-xl mb-2">仪表盘</h2>
-      <pre className="bg-gray-800 p-2 rounded">{JSON.stringify(stats, null, 2)}</pre>
+      <h2 className="text-xl mb-4">仪表盘</h2>
+      <button className="bg-red-600 px-4 py-2 rounded" onClick={handleRestart}>重启 frpc</button>
+      {message && <div className="mt-4">{message}</div>}
     </div>
   );
 }
