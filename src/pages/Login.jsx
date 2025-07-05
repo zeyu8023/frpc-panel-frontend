@@ -18,22 +18,9 @@ export default function Login() {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-900 text-white">
       <h1 className="text-2xl mb-4">登录</h1>
-      <input
-        className="mb-2 p-2 bg-gray-800 border border-gray-600"
-        placeholder="用户名"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        className="mb-4 p-2 bg-gray-800 border border-gray-600"
-        placeholder="密码"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button className="bg-blue-600 px-4 py-2 rounded" onClick={handleLogin}>
-        登录
-      </button>
+      <input className="mb-2 p-2 bg-gray-800 border border-gray-600" placeholder="用户名" value={username} onChange={(e) => setUsername(e.target.value)} />
+      <input className="mb-4 p-2 bg-gray-800 border border-gray-600" placeholder="密码" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <button className="bg-blue-600 px-4 py-2 rounded" onClick={handleLogin}>登录</button>
     </div>
   );
 }
