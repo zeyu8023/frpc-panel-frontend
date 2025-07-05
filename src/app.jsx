@@ -6,6 +6,7 @@ import Proxies from './pages/Proxies';
 import Logs from './pages/Logs';
 import Account from './pages/Account';
 import Navbar from './components/Navbar';
+import PrivateRoute from './components/PrivateRoute';
 import React from 'react';
 
 function App() {
@@ -15,11 +16,11 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/proxies" element={<Proxies />} />
-          <Route path="/logs" element={<Logs />} />
-          <Route path="/account" element={<Account />} />
+          <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
+          <Route path="/proxies" element={<PrivateRoute><Proxies /></PrivateRoute>} />
+          <Route path="/logs" element={<PrivateRoute><Logs /></PrivateRoute>} />
+          <Route path="/account" element={<PrivateRoute><Account /></PrivateRoute>} />
         </Routes>
       </div>
     </Router>
