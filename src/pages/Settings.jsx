@@ -8,14 +8,16 @@ export default function Settings() {
 
   // 加载当前配置
   useEffect(() => {
-    axios.get('/api/settings')
-      。then(res => {
-        setFrpcIniPath(res.data.frpc_ini || '')
-        setContainerName(res.data.container_name || '')
-      })
-      。catch(() => alert('无法加载设置'))
-      。finally(() => setLoading(false))
-  }, [])
+  axios
+    .get('/api/settings')
+    .then(res => {
+      setFrpcIniPath(res.data.frpc_ini || '')
+      setContainerName(res.data.container_name || '')
+    })
+    .catch(err => {
+      console.error('获取设置失败:', err)
+    })
+}, [])
 
   const handleSave = async () => {
     try {
