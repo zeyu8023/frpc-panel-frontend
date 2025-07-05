@@ -9,15 +9,17 @@ export default function Dashboard() {
   useEffect(() => {
     setLoading(true)
     axios
-      。get('/api/proxies')
-      。then(res => {
+      .get('/api/proxies')
+      .then((res) => {
         setProxyCount(res.data.length)
         setContainerStatus('运行中 ✅')
       })
-      。catch(() => {
+      .catch(() => {
         setContainerStatus('无法连接 ❌')
       })
-      。finally(() => setLoading(false))
+      .finally(() => {
+        setLoading(false)
+      })
   }, [])
 
   return (
